@@ -10,14 +10,22 @@ def create_cache(config, name):
     return Cache(nsets, block_size, associativity, name)
 
 def main():
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("Uso:")
         print("python main.py L1 [L2] [L3] arquivo")
         return
     
-    caches = []
     file_name = sys.argv[-1]
     cache_configs = sys.argv[1:-1]
+
+    if len(cache_configs) == 0: # config default
+        cache_configs.append("2048:8:1")
+
+    if len(cache_configs) > 3:
+        print("Erro: Número máximo de caches é 3 (L1, L2, L3).")
+        return 
+
+    caches = []
     names = ["L1", "L2", "L3"]
 
     for i in range(len(cache_configs)):
@@ -45,7 +53,7 @@ def main():
                 caches[level].insert(address)
                 level -= 1
                 
-    print("\n========== RESULTADOS ==========")
+    print("\n================ RESULTADOS ============")
     for cache in caches:
         cache.print_statistics()
 
